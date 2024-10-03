@@ -3,7 +3,7 @@ Rust types package for Alpaca's API. Mostly implementing what I find useful, but
 
 
 ### TODO
-- [] Finish order field enums.
-- [] Finish Positions field enums and subtypes.
-- [] The rest of the API sections.
+- [ ] Finish order field enums.
+- [ ] Finish Positions field enums and subtypes.
+- [ ] The rest of the API sections.
 
