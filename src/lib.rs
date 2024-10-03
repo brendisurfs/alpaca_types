@@ -1,8 +1,9 @@
-use serde::{de, Deserialize, Deserializer, Serializer};
-
 pub mod market_data;
 pub mod orders;
 pub mod positions;
+pub mod trading;
+
+use serde::{de, Deserialize, Deserializer, Serializer};
 
 /// custom deserialization for converting Option<String> to Option<f64> where needed.
 fn f64_from_opt_string<'de, D>(deserializer: D) -> Result<Option<f64>, D::Error>
