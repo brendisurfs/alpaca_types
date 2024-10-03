@@ -13,7 +13,7 @@ pub struct Trade {
     #[serde(rename = "i")]
     pub trade_id: i64,
     #[serde(rename = "p")]
-    pub price: f32,
+    pub price: f64,
     #[serde(rename = "s")]
     pub trade_size: u32,
     #[serde(rename = "t")]
@@ -56,7 +56,7 @@ mod test {
         }
         "#;
 
-        let got: LatestTrades = serde_json::from_str(latest_trade).expect("failed to parse trade");
-        println!("{got:?}");
+        let got = serde_json::from_str::<LatestTrades>(latest_trade);
+        assert!(got.is_ok());
     }
 }
