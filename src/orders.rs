@@ -108,6 +108,7 @@ pub struct OrderRequest {
 /// "us_option" for U.S. options, and "crypto" for cryptocurrencies.
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
+#[cfg_attr(feature = "ts", derive(TS), ts(export))]
 pub enum AssetClass {
     UsEquity,
     UsOption,
