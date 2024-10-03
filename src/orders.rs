@@ -36,16 +36,22 @@ impl Display for OrderSide {
 }
 
 // TODO: Finish these
-#[derive(Serialize, Deserialize)]
-#[serde(rename_all = "lowercase")]
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
 pub enum OrderType {
     Market,
+    Limit,
+    Stop,
+    StopLimit,
 }
 
 impl From<String> for OrderType {
     fn from(value: String) -> Self {
         match value.as_str() {
             "market" => OrderType::Market,
+            "limit" => OrderType::Limit,
+            "stop" => OrderType::Stop,
+            "stop_limit" => OrderType::StopLimit,
             other => panic!("Unknown string {other}"),
         }
     }
@@ -55,21 +61,26 @@ impl Display for OrderType {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             OrderType::Market => write!(f, "market"),
+            OrderType::Limit => write!(f, "limit"),
+            OrderType::Stop => write!(f, "stop"),
+            OrderType::StopLimit => write!(f, "stop_limit"),
         }
     }
 }
 
 // TODO: Finish these
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum TimeInForce {
     Day,
+    GTC,
 }
 
 impl Display for TimeInForce {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             TimeInForce::Day => write!(f, "day"),
+            TimeInForce::GTC => write!(f, "gtc"),
         }
     }
 }
@@ -93,9 +104,10 @@ pub struct OrderRequest {
 /// with options including "us_equity" for U.S. equities,
 /// "us_option" for U.S. options, and "crypto" for cryptocurrencies.
 #[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
 pub enum AssetClass {
-    USEquity,
-    USOption,
+    UsEquity,
+    UsOption,
     Crypto,
 }
 
@@ -103,8 +115,8 @@ impl From<String> for AssetClass {
     fn from(value: String) -> Self {
         match value.as_str() {
             "crypto" => AssetClass::Crypto,
-            "us_equity" => AssetClass::USEquity,
-            "us_option" => AssetClass::USOption,
+            "us_equity" => AssetClass::UsEquity,
+            "us_option" => AssetClass::UsOption,
             other => panic!("Unknown string in asset class: {other}"),
         }
     }
@@ -112,7 +124,7 @@ impl From<String> for AssetClass {
 
 /// # OrderResponse
 /// the structure of data in response to an order being sent.
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct OrderResponse {
     pub id: Uuid,
     pub client_order_id: String,
@@ -222,7 +234,7 @@ pub struct ErrorMessage {
 }
 
 #[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
-#[serde(rename_all = "lowercase")]
+#[serde(rename_all = "snake_case")]
 pub enum OrderStatus {
     New,
     PartiallyFilled,
@@ -350,7 +362,7 @@ mod tests {
     }
 
     #[test]
-    fn test_order_request() {
+    fn order_request_serializes() {
         let wanted =
             r#"{"symbol":"PTON","qty":"10","side":"buy","type":"market","time_in_force":"day"}"#;
 
@@ -361,7 +373,7 @@ mod tests {
             order_type: OrderType::Market,
             time_in_force: TimeInForce::Day,
         };
-        let got = serde_json::to_string(&new_order).expect("failed to parse");
+        let got = serde_json::to_string(&new_order).expect("failed to serialize order");
         assert!(wanted == &got);
     }
 }
