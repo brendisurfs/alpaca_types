@@ -226,17 +226,6 @@ pub struct OrderResponse {
     pub source: Option<serde_json::Value>,
 }
 
-#[derive(Deserialize, Debug)]
-/// # ErrorMessage
-/// defines the general error message received when an error has occured calling the API.
-/// * `code`: the error code belonging to this error.
-/// * `message`: describes what went wrong.
-pub struct ErrorMessage {
-    #[serde(with = "http_serde::status_code")]
-    pub code: StatusCode,
-    pub message: String,
-}
-
 #[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum OrderStatus {
