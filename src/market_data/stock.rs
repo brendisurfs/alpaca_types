@@ -13,7 +13,7 @@ pub struct Trade {
     #[serde(rename = "i")]
     pub trade_id: i64,
     #[serde(rename = "p")]
-    pub price: f64,
+    pub price: f32,
     #[serde(rename = "s")]
     pub trade_size: u32,
     #[serde(rename = "t")]
