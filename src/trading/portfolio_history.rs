@@ -66,3 +66,34 @@ pub struct HistoryFrame {
     // equity value at this trading date
     pub base_value_as_of: String,
 }
+
+#[cfg(test)]
+mod portfolio_history_test {
+    use crate::trading::portfolio_history::PortfolioHistory;
+    const JSON_DATA: &str = r#"
+        {
+            "timestamp": [ 1722000600, 1722004200, 1722007800,1722011400, 1722015000, 1722018600, 1722022200],
+            "equity": [100129.67, 100129.67,100129.67, 100129.67, 100129.67, 100129.67, 100129.67],
+            "profit_loss": [ 0,0,0,0,0,0,0],
+            "profit_loss_pct": [0,0,0,0,0,0,0],
+            "base_value": 100129.67,
+            "base_value_asof": "2024-07-25",
+            "timeframe": "1H"
+        }
+        "#;
+
+    #[test]
+    fn position_history_parses() {
+        let res = serde_json::from_str::<PortfolioHistory>(JSON_DATA);
+        assert!(res.is_ok());
+    }
+
+    #[test]
+    fn history_converts_to_frames() {
+        let res = serde_json::from_str::<PortfolioHistory>(JSON_DATA)
+            .expect("failed to parse portfolio history");
+
+        let frames_result = res.to_frames();
+        assert!(frames_result.is_ok());
+    }
+}
