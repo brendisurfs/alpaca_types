@@ -1,11 +1,9 @@
+use crate::{f64_from_opt_string, serialize_qty};
 use std::fmt::Display;
 
 use http_serde::http::StatusCode;
-use serde::de;
 use serde::Deserialize;
-use serde::Deserializer;
 use serde::Serialize;
-use serde::Serializer;
 use time::serde::rfc3339;
 
 use time::OffsetDateTime;
@@ -90,22 +88,11 @@ pub struct OrderRequest {
     pub time_in_force: TimeInForce,
 }
 
-/// custom serializer to convert quantity string to usize.
-/// * `qty`: float amount to parse
-/// * `serializer`: S
-fn serialize_qty<S>(qty: &f64, serializer: S) -> Result<S::Ok, S::Error>
-where
-    S: Serializer,
-{
-    let qty_str = qty.to_string();
-    serializer.serialize_str(&qty_str)
-}
-
 /// # AssetClass
 /// Serves to identify the nature of the financial instrument,
 /// with options including "us_equity" for U.S. equities,
 /// "us_option" for U.S. options, and "crypto" for cryptocurrencies.
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub enum AssetClass {
     USEquity,
     USOption,
@@ -221,27 +208,6 @@ pub struct OrderResponse {
 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source: Option<serde_json::Value>,
-}
-
-/// custom deserialization for converting Option<String> to Option<f64> where needed.
-fn f64_from_opt_string<'de, D>(deserializer: D) -> Result<Option<f64>, D::Error>
-where
-    D: Deserializer<'de>,
-{
-    let opt: Option<String> = match Option::deserialize(deserializer) {
-        Err(why) => return Err(de::Error::custom(format!("{why}"))),
-        Ok(opt) => opt,
-    };
-
-    match opt {
-        None => Ok(None),
-        Some(s) => match s.parse::<f64>() {
-            Ok(num) => Ok(Some(num)),
-            Err(why) => Err(de::Error::custom(format!(
-                "Failed to parse f64 from string: {why}"
-            ))),
-        },
-    }
 }
 
 #[derive(Deserialize, Debug)]
