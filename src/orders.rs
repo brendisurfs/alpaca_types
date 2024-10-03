@@ -1,5 +1,6 @@
 use std::fmt::Display;
 
+use http_serde::http::StatusCode;
 use serde::de;
 use serde::Deserialize;
 use serde::Deserializer;
@@ -81,26 +82,17 @@ impl Display for TimeInForce {
 #[serde(rename_all = "lowercase")]
 pub struct OrderRequest {
     pub symbol: String,
-
-    // Want to serialize this to String!
     #[serde(serialize_with = "serialize_qty")]
     pub qty: f64,
-
-    //  buy or sell
     pub side: OrderSide,
-
-    /// this is ALWAYS market.
     #[serde(rename = "type")]
     pub order_type: OrderType,
-
-    /// always "day"
     pub time_in_force: TimeInForce,
 }
 
 /// custom serializer to convert quantity string to usize.
-///
-/// * `qty`:
-/// * `serializer`:
+/// * `qty`: float amount to parse
+/// * `serializer`: S
 fn serialize_qty<S>(qty: &f64, serializer: S) -> Result<S::Ok, S::Error>
 where
     S: Serializer,
@@ -253,8 +245,13 @@ where
 }
 
 #[derive(Deserialize, Debug)]
-pub struct OrderError {
-    pub code: i64,
+/// # ErrorMessage
+/// defines the general error message received when an error has occured calling the API.
+/// * `code`: the error code belonging to this error.
+/// * `message`: describes what went wrong.
+pub struct ErrorMessage {
+    #[serde(with = "http_serde::status_code")]
+    pub code: StatusCode,
     pub message: String,
 }
 
@@ -399,7 +396,6 @@ mod tests {
             time_in_force: TimeInForce::Day,
         };
         let got = serde_json::to_string(&new_order).expect("failed to parse");
-        println!("{got}");
         assert!(wanted == &got);
     }
 }
