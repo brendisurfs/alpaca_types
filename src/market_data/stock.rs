@@ -29,3 +29,34 @@ pub struct Trade {
 pub struct LatestTrades {
     pub trades: HashMap<String, Trade>,
 }
+
+#[cfg(test)]
+mod test {
+    use crate::market_data::stock::LatestTrades;
+
+    #[test]
+    fn latest_trade_parses() {
+        let latest_trade = r#"
+        {
+            "trades": {
+                "AAPL": {
+                    "t": "2022-08-17T09:50:43.361102308Z",
+                    "x": "Q",
+                    "p": 172.78,
+                    "s": 100,
+                    "c": [
+                        "@",
+                        "F",
+                        "T"
+                    ],
+                    "i": 826,
+                    "z": "C"
+                }
+            }
+        }
+        "#;
+
+        let got: LatestTrades = serde_json::from_str(latest_trade).expect("failed to parse trade");
+        println!("{got:?}");
+    }
+}
