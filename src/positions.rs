@@ -54,7 +54,7 @@ pub struct OpenPosition {
 
 /// The response we get when we close a position.
 #[derive(Serialize, Deserialize)]
-pub struct ClosePositionResponse {
+pub struct CloseAllPositionsResponse {
     pub symbol: String,
     pub status: String,
     pub body: OrderResponse,

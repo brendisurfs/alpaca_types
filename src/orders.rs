@@ -305,14 +305,6 @@ impl Display for OrderStatus {
     }
 }
 
-/// The response we get when we close a position.
-#[derive(Serialize, Deserialize)]
-pub struct PositionClosed {
-    pub symbol: String,
-    pub status: String,
-    pub body: OrderResponse,
-}
-
 #[cfg(test)]
 mod tests {
 
