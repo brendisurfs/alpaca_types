@@ -1,5 +1,8 @@
 use serde::{Deserialize, Serialize};
 
+#[cfg(feature = "ts")]
+use ts_rs::TS;
+
 #[derive(Deserialize, Default, Debug)]
 #[cfg_attr(feature = "ts", derive(TS), ts(export))]
 pub struct PortfolioHistory {

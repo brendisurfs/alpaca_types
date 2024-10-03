@@ -2,6 +2,9 @@ use std::collections::HashMap;
 
 use serde::{Deserialize, Serialize};
 
+#[cfg(feature = "ts")]
+use ts_rs::TS;
+
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 #[cfg_attr(feature = "ts", derive(TS), ts(export))]
 pub struct Trade {

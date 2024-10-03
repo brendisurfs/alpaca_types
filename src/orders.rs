@@ -9,6 +9,9 @@ use time::serde::rfc3339;
 use time::OffsetDateTime;
 use uuid::Uuid;
 
+#[cfg(feature = "ts")]
+use ts_rs::TS;
+
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum OrderSide {

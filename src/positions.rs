@@ -3,6 +3,9 @@ use crate::{f64_from_opt_string, serialize_qty, string_to_f64};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
+#[cfg(feature = "ts")]
+use ts_rs::TS;
+
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "lowercase")]
 #[cfg_attr(feature = "ts", derive(TS), ts(export))]
