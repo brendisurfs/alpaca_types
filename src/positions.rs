@@ -1,4 +1,4 @@
-use crate::orders::AssetClass;
+use crate::orders::{AssetClass, OrderResponse};
 use crate::{f64_from_opt_string, serialize_qty, string_to_f64};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
@@ -50,6 +50,14 @@ pub struct OpenPosition {
     #[serde(deserialize_with = "string_to_f64")]
     pub change_today: f64,
     pub asset_marginable: bool,
+}
+
+/// The response we get when we close a position.
+#[derive(Serialize, Deserialize)]
+pub struct ClosePositionResponse {
+    pub symbol: String,
+    pub status: String,
+    pub body: OrderResponse,
 }
 
 #[cfg(test)]
