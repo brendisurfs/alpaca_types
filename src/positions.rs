@@ -6,7 +6,7 @@ use uuid::Uuid;
 #[cfg(feature = "ts")]
 use ts_rs::TS;
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
 #[serde(rename_all = "lowercase")]
 #[cfg_attr(feature = "ts", derive(TS), ts(export))]
 pub enum PositionSide {
