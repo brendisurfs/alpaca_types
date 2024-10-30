@@ -1,7 +1,6 @@
 use crate::{f64_from_opt_string, serialize_qty};
 use std::fmt::Display;
 
-use http_serde::http::StatusCode;
 use serde::Deserialize;
 use serde::Serialize;
 use time::serde::rfc3339;
@@ -359,6 +358,6 @@ mod tests {
             time_in_force: TimeInForce::Day,
         };
         let got = serde_json::to_string(&new_order).expect("failed to serialize order");
-        assert!(wanted == &got);
+        assert!(wanted == got);
     }
 }

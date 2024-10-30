@@ -56,7 +56,9 @@ pub struct OpenPosition {
 #[derive(Serialize, Deserialize)]
 pub struct CloseAllPositionsResponse {
     pub symbol: String,
-    pub status: String,
+    // NOTE: at this time (Oct. 30, 2024), alpacas documentation shows the incorrect type for
+    // status. The correct type is int (from testing this response).
+    pub status: u16,
     pub body: OrderResponse,
 }
 
