@@ -105,7 +105,7 @@ pub struct OrderRequest {
 /// Serves to identify the nature of the financial instrument,
 /// with options including "us_equity" for U.S. equities,
 /// "us_option" for U.S. options, and "crypto" for cryptocurrencies.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "snake_case")]
 #[cfg_attr(feature = "ts", derive(TS), ts(export))]
 pub enum AssetClass {
