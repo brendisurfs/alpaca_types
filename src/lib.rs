@@ -36,18 +36,28 @@ where
     D: Deserializer<'de>,
 {
     let de_string: String = match String::deserialize(deserializer) {
-        Err(why) => return Err(de::Error::custom(format!("{why}"))),
         Ok(de_string) => de_string,
+        Err(why) => return Err(de::Error::custom(format!("{why}"))),
     };
 
     match de_string.parse::<f64>() {
+        Err(why) => Err(de::Error::custom(format!("{why}"))),
         Ok(num) => Ok(num),
-        Err(why) => Err(de::Error::custom(format!(
-            "Failed to parse f64 from string: {why}"
-        ))),
     }
 }
 
+/// converts a string to f64 with  a default to 0.0.
+fn empty_field_is_zero<'de, D>(deserializer: D) -> Result<f64, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    let de_str = String::deserialize(deserializer)?;
+    if de_str.is_empty() {
+        Ok(0.0)
+    } else {
+        Ok(de_str.parse::<f64>().unwrap_or(0.0))
+    }
+}
 /// custom serializer to convert quantity string to an f64.
 /// * `qty`: float amount to parse
 /// * `serializer`: S
